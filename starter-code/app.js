@@ -14,6 +14,7 @@ const mongoose           = require('mongoose');
 const flash              = require('connect-flash');
 const hbs                = require('hbs')
 
+
 mongoose.connect('mongodb://localhost:27017/tumblr-lab-development');
 
 const app = express();
@@ -72,12 +73,20 @@ passport.use('local-signup', new LocalStrategy(
                 const {
                   username,
                   email,
+                  imgPath,
+                  imgName,
                   password
                 } = req.body;
+
                 const hashPass = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                const imgPath = req.file.url;
+                const imgName = req.file.originalname;
+
                 const newUser = new User({
                   username,
                   email,
+                  imgPath,
+                  imgName,
                   password: hashPass
                 });
 

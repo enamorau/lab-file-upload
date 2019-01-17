@@ -1,7 +1,8 @@
-const express    = require('express');
-const passport   = require('passport');
-const router     = express.Router();
-const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
+const express                                   = require('express');
+const passport                                  = require('passport');
+const router                                    = express.Router();
+const { ensureLoggedIn, ensureLoggedOut }       = require('connect-ensure-login');
+const uploadCloud                               = require('../config/cloudinary.js');
 
 router.get('/login', ensureLoggedOut(), (req, res) => {
     res.render('authentication/login', { message: req.flash('error')});
@@ -13,7 +14,8 @@ router.post('/login', ensureLoggedOut(), passport.authenticate('local-login', {
   failureFlash : true
 }));
 
-router.get('/signup', ensureLoggedOut(), (req, res) => {
+router.get('/signup', [ensureLoggedOut(), uploadCloud.single('profilPic')], (req, res) => {
+    
     res.render('authentication/signup', { message: req.flash('error')});
 });
 
